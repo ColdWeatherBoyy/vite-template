@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
 
 app.use(static(join(__dirname, "..", "client", "dist")));
 
+app.use(require("./routes"));
+
 // connect to mongoose before starting server
 db.once("open", () => {
 	console.log("database connected");
