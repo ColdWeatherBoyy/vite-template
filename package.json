@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "cd client && npm run dev",
 		"build": "cd client && npm run build",
-		"server": "cd client && npm run server",
+		"server": "cd server && npm run server",
 		"start": "concurrently \"npm run server\" \"npm run dev\""
 	},
 	"keywords": [],
