@@ -29,6 +29,7 @@ const userSchema = new Schema({
 });
 
 userSchema.pre("save", async function (next) {
+	this.email = this.email.toLowerCase();
 	if (this.isNew || this.isModified("password")) {
 		const saltRounds = 10;
 		this.password = await bcrypt.hash(this.password, saltRounds);

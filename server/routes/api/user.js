@@ -1,5 +1,7 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
 const { User } = require("../../models");
+const { signToken, auth } = require("../../utils/auth");
 
 // GET all users /api/users/
 router.get("/", async (req, res) => {
@@ -12,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET one user /api/users/:id
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
 	try {
 		const userId = req.params.id;
 		const userData = await User.findById(userId);
@@ -31,8 +33,37 @@ router.post("/create", async (req, res) => {
 			email,
 			password,
 		});
-		res.json({ message: `User with name ${username} created` });
+
+		const token = signToken(newUser);
+		res.json({ message: `User with name ${username} created`, token });
 	} catch (err) {
+		console.log(err);
+		res.status(500).json(err);
+	}
+});
+
+// LOGIN Route /api/users/login
+router.post("/login", async (req, res) => {
+	try {
+		let { email, password } = req.body;
+		email = email.toLowerCase();
+
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(400).send("Email not found");
+		}
+
+		const verified = await user.isCorrectPassword(password);
+		if (!verified) {
+			return res.status(400).send("Invalid password");
+		}
+
+		const token = signToken(user);
+
+		res.json({ message: `User with name ${user.username} logged in`, token });
+	} catch (err) {
+		console.log(err);
 		res.status(500).json(err);
 	}
 });
