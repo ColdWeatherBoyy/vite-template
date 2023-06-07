@@ -19,7 +19,7 @@ It is built with a basic backend server, a basic database in MongoDB, and a basi
 
 ## Usage
 
-Feel free to use this template as a starting for your MERN apps.
+This template is licensed under the MIT license. Feel free to use this template as a starting point for your MERN apps.
 
 ## Credits
 
